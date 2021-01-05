@@ -6,7 +6,7 @@
 Services for home media server ([torrent](https://hub.docker.com/r/linuxserver/transmission) and [jellyfin](https://hub.docker.com/r/linuxserver/jellyfin))
 
 ### Quick start:
-1. Download release from [here](https://github.com/egnd/go-tghandlers/releases)
+1. Download release from [here](https://github.com/egnd/hms/releases)
 2. Run with command ```make run```
 
 ### Hints:
