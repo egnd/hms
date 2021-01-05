@@ -40,9 +40,10 @@ jobs:
           DC_MEDIA_IMAGE=jellyfin/jellyfin:latest
       - run: echo "${{ secrets.ghcr_token }}" | docker login ghcr.io -u ${{ github.actor }} --password-stdin
       - run: |
-          make run logs
+          make run
           sleep 15
-          docker ps
+          docker ps -a
+          docker-compose logs
       - run: |
           docker-compose ps torrent | grep Up
           docker-compose logs torrent | grep -E "Transmission [0-9.]+ \(.+?\) started"
