@@ -7,7 +7,9 @@ Services for home media server ([torrent](https://hub.docker.com/r/linuxserver/t
 
 ### Quick start:
 1. Download release from [here](https://github.com/egnd/hms/releases)
-2. Run with command ```make run```
+2. Create a ```.env```-file with ```copy .env.dist .env```
+3. Optionally, create a ```docker-compose.override.yml``` from ```docker-compose.example.yml```
+4. Run with ```make run```
 
 ### Hints:
 * To set specific path for torrent's downloads folder, you need to override volume ```torrent-downloads``` by adding to ```docker-compose.override.yml```:
