@@ -40,7 +40,7 @@ jobs:
           sed -i "s#DC_MEDIA_IMAGE=#DC_MEDIA_IMAGE=${REGISTRY_PREFIX}/#g" release/.env
       - run: echo "${{ secrets.ghcr_token }}" | docker login ghcr.io -u ${{ github.actor }} --password-stdin
       - run: |
-          cd release && make run && sleep 15
+          cd release && make run logs && sleep 15
           docker-compose ps --all
       - uses: actions/upload-artifact@v2
         with:
