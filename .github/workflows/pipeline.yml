@@ -8,7 +8,7 @@ env:
   IMG_TORRENT: linuxserver/transmission:amd64-latest
   IMG_MEDIA: jellyfin/jellyfin:latest
 jobs:
-  
+
   todos:
     runs-on: ubuntu-latest
     continue-on-error: true
@@ -35,18 +35,24 @@ jobs:
     steps:
       - uses: actions/checkout@v2
       - run: |
-          make release && cd release && cp .env.dist .env
-          DC_TORRENT_IMAGE=linuxserver/transmission:amd64-latest
-          DC_MEDIA_IMAGE=jellyfin/jellyfin:latest
+          make release && cp .env.dist release/.env
+          sed -i "s#DC_TORRENT_IMAGE=#DC_TORRENT_IMAGE=${REGISTRY_PREFIX}/#g" release/.env
+          sed -i "s#DC_MEDIA_IMAGE=#DC_MEDIA_IMAGE=${REGISTRY_PREFIX}/#g" release/.env
       - run: echo "${{ secrets.ghcr_token }}" | docker login ghcr.io -u ${{ github.actor }} --password-stdin
       - run: |
-          make run logs
-          sleep 15
-          docker ps
+          cd release && make run logs && sleep 15
+          docker-compose ps --all
+      - uses: actions/upload-artifact@v2
+        with:
+          name: compose-logs
+          path: |
+            release/.env
+            release/compose.log
+          retention-days: 1
       - run: |
-          docker-compose ps torrent | grep Up
+          cd release && docker-compose ps torrent | grep Up
           docker-compose logs torrent | grep -E "Transmission [0-9.]+ \(.+?\) started"
       - run: |
-          docker-compose ps media | grep Up
+          cd release && docker-compose ps media | grep Up
           docker-compose logs media | grep "Main: Startup complete"
-      - run: docker-compose down --remove-orphans
+      - run: cd release && docker-compose down --remove-orphans
