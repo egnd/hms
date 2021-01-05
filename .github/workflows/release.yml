@@ -13,12 +13,12 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ github.token }}
       - uses: actions/checkout@v2
-      - run: make release BUILD_VERSION=${{github.ref}}
+      - run: make release BUILD_VERSION=${GITHUB_REF##*/}
       - uses: actions/upload-release-asset@v1
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           upload_url: ${{ steps.get_release.outputs.upload_url }}
-          asset_path: ./hms-${{github.ref}}.zip
-          asset_name: hms-${{github.ref}}.zip
+          asset_path: ./hms-${GITHUB_REF##*/}.zip
+          asset_name: hms-${GITHUB_REF##*/}.zip
           asset_content_type: application/zip
