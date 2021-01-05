@@ -1,0 +1,9 @@
+version: '3.8'
+
+services:
+  torrent:
+    ports:
+      - 127.0.0.1:9091:9091
+  media:
+    ports:
+      - 127.0.0.1:8096:8096

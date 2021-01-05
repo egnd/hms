@@ -1,0 +1,30 @@
+version: '3.8'
+
+services:
+  torrent:
+    image: ${DC_TORRENT_IMAGE}
+    environment:
+      TZ: ${DC_TZ}
+      TRANSMISSION_WEB_HOME: /combustion-release/      
+      USER: ${TORRENT_LOGIN}
+      PASS: ${TORRENT_PASSWORD}
+    restart: unless-stopped
+    volumes:
+      - torrent-cfg:/config:rw
+      - torrent-downloads:/downloads:rw
+  media:
+    image: ${DC_MEDIA_IMAGE}
+    environment:
+      TZ: ${DC_TZ}
+    restart: unless-stopped
+    volumes: 
+      - media-cfg:/config:rw
+      - torrent-downloads:/media:ro
+
+volumes:
+  torrent-downloads:
+    driver: local
+  torrent-cfg:
+    driver: local
+  media-cfg:
+    driver: local

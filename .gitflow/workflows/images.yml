@@ -1,0 +1,27 @@
+name: Images
+on:
+  push:
+    paths:
+      - '.github/workflows/images.yml'
+      - 'build/media.Dockerfile'
+      - 'build/torrent.Dockerfile'
+env:
+  REGISTRY_URL: ghcr.io
+  REGISTRY_PREFIX: ghcr.io/${{github.repository}}
+  IMG_TORRENT: linuxserver/transmission:amd64-latest
+  IMG_MEDIA: jellyfin/jellyfin:latest
+jobs:
+  torrent:
+    runs-on: ubuntu-latest
+    steps:
+      - run: echo "${{ secrets.ghcr_token }}" | docker login ghcr.io -u ${{ github.actor }} --password-stdin
+      - uses: actions/checkout@v2
+      - run: docker build --tag=$REGISTRY_PREFIX/$IMG_TORRENT --build-arg BASE_IMG=$IMG_TORRENT --file=build/torrent.Dockerfile build
+      - run: docker push $REGISTRY_PREFIX/$IMG_TORRENT
+  media:
+    runs-on: ubuntu-latest
+    steps:
+      - run: echo "${{ secrets.ghcr_token }}" | docker login ghcr.io -u ${{ github.actor }} --password-stdin
+      - uses: actions/checkout@v2
+      - run: docker build --tag=$REGISTRY_PREFIX/$IMG_MEDIA --build-arg BASE_IMG=$IMG_MEDIA --file=build/media.Dockerfile build
+      - run: docker push $REGISTRY_PREFIX/$IMG_MEDIA
