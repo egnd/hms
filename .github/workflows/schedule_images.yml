@@ -1,7 +1,7 @@
-name: Images
+name: Images schedule
 on:
   schedule:
-    - cron: "0 13 * * 1" # Every Monday at 1PM UTC (9AM EST)
+    - cron: "0 13 * * 1" # Every Monday at 1PM UTC
 env:
   REGISTRY_URL: ghcr.io
   REGISTRY_PREFIX: ghcr.io/${{github.repository}}
